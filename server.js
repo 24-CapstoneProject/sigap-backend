@@ -29,11 +29,8 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    // Mengizinkan semua origin secara dinamis agar tidak ada kendala CORS di Vercel/Production
+    callback(null, true);
   },
   credentials: true,
 }));
