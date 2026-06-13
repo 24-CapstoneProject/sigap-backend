@@ -4,20 +4,30 @@
 
 USE sigap_db;
 
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE lost_found_claims;
+TRUNCATE TABLE lost_found;
+TRUNCATE TABLE inventory_loans;
+TRUNCATE TABLE inventory;
+TRUNCATE TABLE bookings;
+TRUNCATE TABLE rooms;
+TRUNCATE TABLE users;
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- =============================================
 -- Admin User (password: admin123)
 -- =============================================
 INSERT INTO users (id, nim, email, name, password_hash, phone, prodi, role) VALUES
-('admin-001', 'ADMIN001', 'admin@untad.ac.id', 'Administrator', '$2a$10$YXdrFZ4j5h8K7z2p9Q5x8eK5l9M2o3N8Xq6P1r8S0t9U2V3W4X5', '081234567890', 'Administrasi', 'admin');
+('admin-001', 'ADMIN001', 'admin@untad.ac.id', 'Administrator', '$2a$10$5FaXnqbQFV2jN63eU60mxeQDtmIFWFtc5SHY9oVRLgzsz61dLH3KW', '081234567890', 'Administrasi', 'admin');
 
 -- =============================================
 -- Student Users (password: 123456)
 -- =============================================
 INSERT INTO users (id, nim, email, name, password_hash, phone, prodi, role) VALUES
-('user-001', 'F55123064', 'syaif.ali@student.untad.ac.id', 'Syaif Ali M. Risal', '$2a$10$YXdrFZ4j5h8K7z2p9Q5x8eK5l9M2o3N8Xq6P1r8S0t9U2V3W4X5', '081234567890', 'Teknik Informatika', 'mahasiswa'),
-('user-002', 'F52123083', 'safana.annisa@student.untad.ac.id', 'Safana Annisa Salsabilah', '$2a$10$YXdrFZ4j5h8K7z2p9Q5x8eK5l9M2o3N8Xq6P1r8S0t9U2V3W4X5', '081234567891', 'Teknik Informatika', 'mahasiswa'),
-('user-003', 'F52123084', 'roni.wijaya@student.untad.ac.id', 'Roni Wijaya', '$2a$10$YXdrFZ4j5h8K7z2p9Q5x8eK5l9M2o3N8Xq6P1r8S0t9U2V3W4X5', '081234567892', 'Teknik Informatika', 'mahasiswa'),
-('user-004', 'F55123015', 'andi.pratama@student.untad.ac.id', 'Andi Pratama', '$2a$10$YXdrFZ4j5h8K7z2p9Q5x8eK5l9M2o3N8Xq6P1r8S0t9U2V3W4X5', '081234567893', 'Teknik Informatika', 'mahasiswa');
+('user-001', 'F55123064', 'syaif.ali@student.untad.ac.id', 'Syaif Ali M. Risal', '$2a$10$5FaXnqbQFV2jN63eU60mxej7f1VPjR6blqoSVEBHkZazvslgXI9Wy', '081234567890', 'Teknik Informatika', 'mahasiswa'),
+('user-002', 'F52123083', 'safana.annisa@student.untad.ac.id', 'Safana Annisa Salsabilah', '$2a$10$5FaXnqbQFV2jN63eU60mxej7f1VPjR6blqoSVEBHkZazvslgXI9Wy', '081234567891', 'Teknik Informatika', 'mahasiswa'),
+('user-003', 'F52123084', 'roni.wijaya@student.untad.ac.id', 'Roni Wijaya', '$2a$10$5FaXnqbQFV2jN63eU60mxej7f1VPjR6blqoSVEBHkZazvslgXI9Wy', '081234567892', 'Teknik Informatika', 'mahasiswa'),
+('user-004', 'F55123015', 'andi.pratama@student.untad.ac.id', 'Andi Pratama', '$2a$10$5FaXnqbQFV2jN63eU60mxej7f1VPjR6blqoSVEBHkZazvslgXI9Wy', '081234567893', 'Teknik Informatika', 'mahasiswa');
 
 -- =============================================
 -- Rooms
@@ -60,8 +70,8 @@ INSERT INTO inventory (id, name, description, quantity, category, location, stat
 -- =============================================
 -- Inventory Loans (Sample)
 -- =============================================
-INSERT INTO inventory_loans (id, user_id, inventory_id, ktp_number, status, condition_borrowed, borrowed_at) VALUES
-('loan-001', 'user-001', 'inv-001', '1234567890123456', 'borrowed', 'Baik', DATE_SUB(NOW(), INTERVAL 2 DAY)),
+INSERT INTO inventory_loans (id, user_id, inventory_id, ktp_number, status, condition_borrowed, borrowed_at, returned_at) VALUES
+('loan-001', 'user-001', 'inv-001', '1234567890123456', 'borrowed', 'Baik', DATE_SUB(NOW(), INTERVAL 2 DAY), NULL),
 ('loan-002', 'user-002', 'inv-002', '1234567890123457', 'returned', 'Baik', DATE_SUB(NOW(), INTERVAL 5 DAY), DATE_SUB(NOW(), INTERVAL 3 DAY));
 
 -- =============================================

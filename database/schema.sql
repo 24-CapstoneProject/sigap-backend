@@ -7,6 +7,8 @@
 CREATE DATABASE IF NOT EXISTS sigap_db;
 USE sigap_db;
 
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- =============================================
 -- Users Table
 -- =============================================

@@ -100,6 +100,12 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ error: 'NIM, email, name, and password are required' });
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      return res.status(400).json({ error: 'Format email tidak valid' });
+    }
+
     // Check if user already exists
     const existing = await query('SELECT * FROM users WHERE nim = ? OR email = ?', [nim, email]);
     if (existing.length > 0) {
@@ -193,4 +199,32 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Check if user exists
+    const users = await query('SELECT * FROM users WHERE id = ?', [userId]);
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = users[0];
+
+    // Prevent admin from deleting themselves
+    if (user.id === req.user.id) {
+      return res.status(400).json({ error: 'Anda tidak dapat menghapus akun Anda sendiri' });
+    }
+
+    // Delete user
+    await query('DELETE FROM users WHERE id = ?', [userId]);
+
+    res.json({ message: `Akun ${user.name} berhasil dihapus.` });
+  } catch (err) {
+    console.error('Delete user error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
