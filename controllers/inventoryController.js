@@ -104,12 +104,21 @@ export const getInventoryById = async (req, res) => {
 
 export const createInventory = async (req, res) => {
   try {
-    const { name, description, quantity, category, location } = req.body;
+    const { name, description, quantity, category, location, status } = req.body;
 
     const itemId = uuidv4();
+
+    // Map frontend status to database ENUM('available', 'maintenance', 'unavailable')
+    let dbStatus = 'available';
+    if (status === 'broken' || status === 'unavailable') {
+      dbStatus = 'unavailable';
+    } else if (status === 'maintenance') {
+      dbStatus = 'maintenance';
+    }
+
     await query(
       'INSERT INTO inventory (id, name, description, quantity, category, location, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())',
-      [itemId, name, description, quantity, category, location, 'available']
+      [itemId, name, description, quantity, category, location, dbStatus]
     );
 
     res.status(201).json({
@@ -127,9 +136,19 @@ export const updateInventory = async (req, res) => {
     const { itemId } = req.params;
     const { name, description, quantity, category, location, status } = req.body;
 
+    // Map frontend status to database ENUM('available', 'maintenance', 'unavailable')
+    let dbStatus = 'available';
+    if (status === 'broken' || status === 'unavailable') {
+      dbStatus = 'unavailable';
+    } else if (status === 'maintenance') {
+      dbStatus = 'maintenance';
+    } else if (status === 'available' || status === 'borrowed') {
+      dbStatus = 'available';
+    }
+
     await query(
       'UPDATE inventory SET name = ?, description = ?, quantity = ?, category = ?, location = ?, status = ? WHERE id = ?',
-      [name, description, quantity, category, location, status, itemId]
+      [name, description, quantity, category, location, dbStatus, itemId]
     );
 
     res.json({ message: 'Inventory updated successfully' });
